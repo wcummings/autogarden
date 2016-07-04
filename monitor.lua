@@ -17,7 +17,7 @@ end)
 function payload()
     moistureSignal = adc.read(0)
     ip = wifi.sta.getip()
-    body = '{"ip":"' .. ip .. ', "ms":"' .. moistureSignal .. '""}'
+    body = '{"ip":"' .. ip .. '", "ms":' .. moistureSignal .. '}'
     return "POST " .. config.LOG_ENDPOINT .. " HTTP/1.1\r\n" ..
         "Host: " .. config.LOG_HOST .. "\r\n" ..
         "Content-Type: application/json\r\n" ..
@@ -27,6 +27,7 @@ function payload()
 end
 
 function log()
+    print("Logging to " .. config.LOG_HOST .. config.LOG_ENDPOINT)
     conn = net.createConnection(net.TCP, 0)
     conn:on("receive", function(conn, payload)
                 print(payload)
@@ -37,5 +38,5 @@ function log()
     conn:on("sent", function(conn)
                 conn:close()
     end)
-    conn:connect(80, log_host)
+    conn:connect(80, config.LOG_HOST)
 end
