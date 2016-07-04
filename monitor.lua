@@ -17,7 +17,7 @@ end)
 function payload()
     moistureSignal = adc.read(0)
     ip = wifi.sta.getip()
-    body = '{"ip":"' .. ip .. '", "ms":' .. moistureSignal .. '}'
+    body = '{"id": ' .. config.ID .. ', "ip":"' .. ip .. '", "ms":' .. moistureSignal .. '}'
     return "POST " .. config.LOG_ENDPOINT .. " HTTP/1.1\r\n" ..
         "Host: " .. config.LOG_HOST .. "\r\n" ..
         "Content-Type: application/json\r\n" ..
