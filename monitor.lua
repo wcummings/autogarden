@@ -16,7 +16,7 @@ end)
 function payload()
     moistureSignal = adc.read(0)
     ip = wifi.sta.getip()
-    body = '{"id": ' .. config.ID .. ', "ip":"' .. ip .. '", "ms":' .. moistureSignal .. '}'
+    body = '{"authentifier": ' .. config.AUTHENTIFIER .. ', "id": ' .. config.ID .. ', "ip":"' .. ip .. '", "ms":' .. moistureSignal .. '}'
     return "POST " .. config.LOG_ENDPOINT .. " HTTP/1.1\r\n" ..
         "Host: " .. config.LOG_HOST .. "\r\n" ..
         "Content-Type: application/json\r\n" ..
@@ -36,6 +36,8 @@ function log()
     end)
     conn:on("sent", function(conn)
                 conn:close()
+    end)
+    conn:on("disconnection", function(conn, payload)
                 node.dsleep(config.INTERVAL_MIN*60*1000000)
     end)
     conn:connect(80, config.LOG_HOST)
